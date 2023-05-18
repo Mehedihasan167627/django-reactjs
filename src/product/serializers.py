@@ -18,6 +18,9 @@ class ProductSerializer(serializers.ModelSerializer):
         if len(variants)==0:
            raise serializers.ValidationError("Varient field is required")
         # print(variants)
+        ids=set([p.product.id for p in ProductVariantPrice.objects.all()])
+        Product.objects.exclude(id__in=ids).delete()
+        
         product=Product.objects.create(
             title=attrs.get("title"),
             sku=attrs.get("sku"),
@@ -93,7 +96,6 @@ class ProductSerializer(serializers.ModelSerializer):
                     product=product,
                 )
                 product_var.save()
-        ids=set([p.product.id for p in ProductVariantPrice.objects.all()])
-        Product.objects.exclude(id__in=ids).delete()
+        
      
         return super().validate(attrs)

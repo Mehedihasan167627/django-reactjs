@@ -93,7 +93,7 @@
                     </td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="{% url 'product:edit.product' product.sku %}" class="btn btn-success">Edit</a>
+                            <a href="" class="btn btn-success">Edit</a>
                         </div>
                     </td>
                 </tr>
@@ -112,7 +112,10 @@
             <div class="row justify-content-between">
                 {% if products.paginator.page_range %}
                 <div class="col-md-6">
-                    <p>Showing 1 to {{show_items_count}} out of {{total_count}}</p>
+                    
+                    <p>Showing {% if show_items_count > 0 %}
+                         1 {% else %} 0
+                        {% endif %} to {{show_items_count}} out of {{total_count}}</p>
                 </div>
                 {% endif %}
                 <div class="col-md-6">
