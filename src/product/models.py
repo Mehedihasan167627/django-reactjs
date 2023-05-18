@@ -8,22 +8,48 @@ class Variant(TimeStampMixin):
     description = models.TextField()
     active = models.BooleanField(default=True)
 
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        db_table="variants"
 
 class Product(TimeStampMixin):
     title = models.CharField(max_length=255)
     sku = models.SlugField(max_length=255, unique=True)
     description = models.TextField()
 
+    def __str__(self) -> str:
+        return self.title
+
+
+    class Meta:
+        db_table="products"
 
 class ProductImage(TimeStampMixin):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     file_path = models.URLField()
+    def __str__(self) -> str:
+        return self.product.title 
+    
+
+    class Meta:
+        db_table="product_images"
 
 
 class ProductVariant(TimeStampMixin):
     variant_title = models.CharField(max_length=255)
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,related_name="product_variant", on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.variant_title
+    
+    class Meta:
+        db_table="product_variants"
+
+    def __str__(self) -> str:
+        return self.variant_title
+
 
 
 class ProductVariantPrice(TimeStampMixin):
@@ -35,4 +61,12 @@ class ProductVariantPrice(TimeStampMixin):
                                               related_name='product_variant_three')
     price = models.FloatField()
     stock = models.FloatField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,related_name="product", on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+        return self.product.title
+    
+
+    class Meta:
+        db_table="product_variant_price"
+
